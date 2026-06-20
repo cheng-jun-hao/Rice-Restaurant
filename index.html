@@ -247,16 +247,14 @@
     border-radius: 2px;
   }
 
-  /* ========== 菜品滑动区 ========== */
+  /* ========== 菜品列表 ========== */
   .menu-section {
-    padding: 8vw 0;
+    padding: 8vw 6vw;
     background: #fff8f0;
-    position: relative;
   }
 
   .section-header {
     text-align: center;
-    padding: 0 6vw;
     margin-bottom: 2rem;
   }
 
@@ -276,137 +274,34 @@
     line-height: 1.3;
   }
 
-  .dish-slider-container {
-    position: relative;
-    overflow: hidden;
-    padding: 0 6vw;
-  }
-
-  .dish-slider {
-    display: flex;
-    transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
-  }
-
-  .dish-slide {
-    flex: 0 0 100%;
-    width: 85vw;
-    max-width: 400px;
-    margin: 0 auto;
-    background: #fff;
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow: 0 4px 20px rgba(255,107,53,0.12);
-    padding-bottom: 1.2rem;
-  }
-
-  .dish-slide-image {
-    width: 100%;
-    height: 55vw;
-    max-height: 280px;
-    min-height: 180px;
-    background-size: cover;
-    background-position: center;
-    position: relative;
-  }
-
-  .dish-slide-tag {
-    position: absolute;
-    top: 12px;
-    left: 12px;
-    background: #ff6b35;
-    color: #fff;
-    font-size: 0.7rem;
-    font-weight: 700;
-    padding: 0.3em 0.8em;
-    border-radius: 15px;
-    letter-spacing: 0.05em;
-    box-shadow: 0 2px 8px rgba(255,107,53,0.4);
-  }
-
-  .dish-slide-info {
-    padding: 1.2rem 1rem 0;
-    text-align: center;
-  }
-
-  .dish-slide-name {
-    font-size: clamp(1.1rem, 4vw, 1.4rem);
-    font-weight: 900;
-    color: #333;
-    margin-bottom: 0.5rem;
-  }
-
-  .dish-slide-desc {
-    font-size: clamp(0.8rem, 2.5vw, 0.9rem);
-    color: #888;
-    margin-bottom: 0.8rem;
-    line-height: 1.5;
-  }
-
-  .dish-slide-price {
-    font-size: clamp(1.3rem, 5vw, 1.6rem);
-    font-weight: 900;
-    color: #ff6b35;
-    font-family: "SF Mono", "Menlo", monospace;
-  }
-
-  /* 滑动指示器 */
-  .slider-indicators {
-    display: flex;
-    justify-content: center;
-    gap: 6px;
-    margin-top: 1.5rem;
-    padding: 0 6vw;
-  }
-
-  .slider-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: #ddd;
-    cursor: pointer;
-    transition: all 0.3s ease;
-  }
-
-  .slider-dot.active {
-    background: #ff6b35;
-    width: 20px;
-    border-radius: 3px;
-  }
-
-  /* ========== 全部菜品网格 ========== */
-  .menu-grid-section {
-    padding: 6vw;
-    background: #fff;
-  }
-
-  .menu-grid {
+  .menu-list {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 1rem;
   }
 
-  .menu-card {
-    background: #fff8f0;
+  .menu-item {
+    background: #fff;
     border-radius: 12px;
     overflow: hidden;
     box-shadow: 0 2px 12px rgba(255,107,53,0.08);
     transition: all 0.3s ease;
   }
 
-  .menu-card:hover {
+  .menu-item:hover {
     transform: translateY(-3px);
     box-shadow: 0 6px 20px rgba(255,107,53,0.15);
   }
 
-  .menu-card-image {
+  .menu-item-image {
     width: 100%;
-    height: 110px;
+    height: 140px;
     background-size: cover;
     background-position: center;
     position: relative;
   }
 
-  .menu-card-tag {
+  .menu-item-tag {
     position: absolute;
     top: 6px;
     left: 6px;
@@ -418,11 +313,11 @@
     border-radius: 8px;
   }
 
-  .menu-card-info {
+  .menu-item-info {
     padding: 0.8rem;
   }
 
-  .menu-card-name {
+  .menu-item-name {
     font-size: clamp(0.85rem, 3vw, 0.95rem);
     font-weight: 700;
     color: #333;
@@ -432,7 +327,7 @@
     text-overflow: ellipsis;
   }
 
-  .menu-card-price {
+  .menu-item-price {
     font-size: clamp(1rem, 3.5vw, 1.15rem);
     font-weight: 900;
     color: #ff6b35;
@@ -581,13 +476,13 @@
 
   /* ========== 响应式 ========== */
   @media (min-width: 768px) {
-    .menu-grid { grid-template-columns: repeat(3, 1fr); }
-    .menu-card-image { height: 130px; }
+    .menu-list { grid-template-columns: repeat(3, 1fr); }
+    .menu-item-image { height: 160px; }
   }
 
   @media (min-width: 1024px) {
-    .menu-grid { grid-template-columns: repeat(4, 1fr); }
-    .menu-card-image { height: 140px; }
+    .menu-list { grid-template-columns: repeat(4, 1fr); }
+    .menu-item-image { height: 180px; }
   }
 </style>
 </head>
@@ -641,128 +536,104 @@
   <div class="hero-pattern"></div>
   <div class="hero-content">
     <img src="picture/logo.jpg" alt="饭米粒米饭王国" class="hero-logo">
-    <h1 class="hero-brand">饭米粒米饭王国</h1>
+    <h1 class="hero-brand">饭米粒<br>米饭王国</h1>
     <p class="hero-sub">粒粒饱满 · 口口香浓</p>
     <div class="hero-line"></div>
   </div>
 </section>
 
-<!-- ========== 米饭类滑动展示 ========== -->
+<!-- ========== 米饭类 ========== -->
 <section class="menu-section">
   <div class="section-header">
     <div class="section-label">米 饭 类</div>
     <h2 class="section-title">精选米饭 · 元气满满</h2>
   </div>
-  <div class="dish-slider-container">
-    <div class="dish-slider" id="riceSlider">
-      <div class="dish-slide">
-        <div class="dish-slide-image" style="background-image: url('picture/招牌咖喱鸡排蛋包饭23.9.jpg')">
-          <span class="dish-slide-tag">🏆 招牌</span>
-        </div>
-        <div class="dish-slide-info">
-          <div class="dish-slide-name">招牌咖喱鸡排蛋包饭</div>
-          <div class="dish-slide-desc">秘制咖喱酱搭配金黄鸡排</div>
-          <div class="dish-slide-price">¥23.9</div>
-        </div>
+  <div class="menu-list">
+    <div class="menu-item">
+      <div class="menu-item-image" style="background-image: url('picture/招牌咖喱鸡排蛋包饭23.9.jpg')">
+        <span class="menu-item-tag">招牌</span>
       </div>
-      <div class="dish-slide">
-        <div class="dish-slide-image" style="background-image: url('picture/咖喱鸡排蛋包饭23.9.jpg')">
-          <span class="dish-slide-tag">🔥 人气</span>
-        </div>
-        <div class="dish-slide-info">
-          <div class="dish-slide-name">咖喱鸡排蛋包饭</div>
-          <div class="dish-slide-desc">浓郁咖喱香配嫩滑鸡排</div>
-          <div class="dish-slide-price">¥23.9</div>
-        </div>
-      </div>
-      <div class="dish-slide">
-        <div class="dish-slide-image" style="background-image: url('picture/卤肉饭25.jpg')">
-          <span class="dish-slide-tag">⭐ 必点</span>
-        </div>
-        <div class="dish-slide-info">
-          <div class="dish-slide-name">卤肉饭</div>
-          <div class="dish-slide-desc">秘制卤汁炖煮五花肉</div>
-          <div class="dish-slide-price">¥25</div>
-        </div>
-      </div>
-      <div class="dish-slide">
-        <div class="dish-slide-image" style="background-image: url('picture/鸡腿饭25.jpg')">
-          <span class="dish-slide-tag">👍 推荐</span>
-        </div>
-        <div class="dish-slide-info">
-          <div class="dish-slide-name">鸡腿饭</div>
-          <div class="dish-slide-desc">大鸡腿配香米饭</div>
-          <div class="dish-slide-price">¥25</div>
-        </div>
+      <div class="menu-item-info">
+        <div class="menu-item-name">招牌咖喱鸡排蛋包饭</div>
+        <div class="menu-item-price">¥23.9</div>
       </div>
     </div>
-  </div>
-  <div class="slider-indicators" id="riceIndicators">
-    <span class="slider-dot active" onclick="goToRice(0)"></span>
-    <span class="slider-dot" onclick="goToRice(1)"></span>
-    <span class="slider-dot" onclick="goToRice(2)"></span>
-    <span class="slider-dot" onclick="goToRice(3)"></span>
+    <div class="menu-item">
+      <div class="menu-item-image" style="background-image: url('picture/咖喱鸡排蛋包饭23.9.jpg')">
+        <span class="menu-item-tag">人气</span>
+      </div>
+      <div class="menu-item-info">
+        <div class="menu-item-name">咖喱鸡排蛋包饭</div>
+        <div class="menu-item-price">¥23.9</div>
+      </div>
+    </div>
+    <div class="menu-item">
+      <div class="menu-item-image" style="background-image: url('picture/卤肉饭25.jpg')">
+        <span class="menu-item-tag">必点</span>
+      </div>
+      <div class="menu-item-info">
+        <div class="menu-item-name">卤肉饭</div>
+        <div class="menu-item-price">¥25</div>
+      </div>
+    </div>
+    <div class="menu-item">
+      <div class="menu-item-image" style="background-image: url('picture/鸡腿饭25.jpg')">
+        <span class="menu-item-tag">推荐</span>
+      </div>
+      <div class="menu-item-info">
+        <div class="menu-item-name">鸡腿饭</div>
+        <div class="menu-item-price">¥25</div>
+      </div>
+    </div>
   </div>
 </section>
 
 <!-- ========== 波浪分隔 ========== -->
 <div class="wave-divider"></div>
 
-<!-- ========== 小吃类滑动展示 ========== -->
+<!-- ========== 小吃类 ========== -->
 <section class="menu-section" style="background: #fff;">
   <div class="section-header">
     <div class="section-label">小 吃 类</div>
     <h2 class="section-title">美味小吃 · 锦上添花</h2>
   </div>
-  <div class="dish-slider-container">
-    <div class="dish-slider" id="snackSlider">
-      <div class="dish-slide">
-        <div class="dish-slide-image" style="background-image: url('picture/香香元宝鸡6.jpg')">
-          <span class="dish-slide-tag">🔥 人气</span>
-        </div>
-        <div class="dish-slide-info">
-          <div class="dish-slide-name">香香元宝鸡</div>
-          <div class="dish-slide-desc">外酥里嫩形似元宝</div>
-          <div class="dish-slide-price">¥6</div>
-        </div>
+  <div class="menu-list">
+    <div class="menu-item">
+      <div class="menu-item-image" style="background-image: url('picture/香香元宝鸡6.jpg')">
+        <span class="menu-item-tag">人气</span>
       </div>
-      <div class="dish-slide">
-        <div class="dish-slide-image" style="background-image: url('picture/鸡腿6.jpg')">
-          <span class="dish-slide-tag">🔥 热销</span>
-        </div>
-        <div class="dish-slide-info">
-          <div class="dish-slide-name">鸡腿</div>
-          <div class="dish-slide-desc">大鸡腿香嫩多汁</div>
-          <div class="dish-slide-price">¥6</div>
-        </div>
-      </div>
-      <div class="dish-slide">
-        <div class="dish-slide-image" style="background-image: url('picture/香煎荷包蛋6.jpg')">
-          <span class="dish-slide-tag">⭐ 必点</span>
-        </div>
-        <div class="dish-slide-info">
-          <div class="dish-slide-name">香煎荷包蛋</div>
-          <div class="dish-slide-desc">煎至金黄酥脆边缘</div>
-          <div class="dish-slide-price">¥6</div>
-        </div>
-      </div>
-      <div class="dish-slide">
-        <div class="dish-slide-image" style="background-image: url('picture/脆香薯球8.8.jpg')">
-          <span class="dish-slide-tag">👍 推荐</span>
-        </div>
-        <div class="dish-slide-info">
-          <div class="dish-slide-name">脆香薯球</div>
-          <div class="dish-slide-desc">薯泥炸至金黄酥脆</div>
-          <div class="dish-slide-price">¥8.8</div>
-        </div>
+      <div class="menu-item-info">
+        <div class="menu-item-name">香香元宝鸡</div>
+        <div class="menu-item-price">¥6</div>
       </div>
     </div>
-  </div>
-  <div class="slider-indicators" id="snackIndicators">
-    <span class="slider-dot active" onclick="goToSnack(0)"></span>
-    <span class="slider-dot" onclick="goToSnack(1)"></span>
-    <span class="slider-dot" onclick="goToSnack(2)"></span>
-    <span class="slider-dot" onclick="goToSnack(3)"></span>
+    <div class="menu-item">
+      <div class="menu-item-image" style="background-image: url('picture/鸡腿6.jpg')">
+        <span class="menu-item-tag">热销</span>
+      </div>
+      <div class="menu-item-info">
+        <div class="menu-item-name">鸡腿</div>
+        <div class="menu-item-price">¥6</div>
+      </div>
+    </div>
+    <div class="menu-item">
+      <div class="menu-item-image" style="background-image: url('picture/香煎荷包蛋6.jpg')">
+        <span class="menu-item-tag">必点</span>
+      </div>
+      <div class="menu-item-info">
+        <div class="menu-item-name">香煎荷包蛋</div>
+        <div class="menu-item-price">¥6</div>
+      </div>
+    </div>
+    <div class="menu-item">
+      <div class="menu-item-image" style="background-image: url('picture/脆香薯球8.8.jpg')">
+        <span class="menu-item-tag">推荐</span>
+      </div>
+      <div class="menu-item-info">
+        <div class="menu-item-name">脆香薯球</div>
+        <div class="menu-item-price">¥8.8</div>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -804,9 +675,8 @@
   饭米粒米饭王国 · 粒粒饱满，口口香浓
 </footer>
 
-<!-- ========== 脚本 ========== -->
+<!-- ========== Banner轮播脚本 ========== -->
 <script>
-  // Banner轮播
   (function() {
     const track = document.getElementById('bannerTrack');
     const dots = document.querySelectorAll('.banner-dot');
@@ -830,98 +700,6 @@
     setInterval(() => {
       updateBanner((currentBanner + 1) % totalBanners);
     }, 4000);
-  })();
-
-  // 米饭滑动
-  (function() {
-    const slider = document.getElementById('riceSlider');
-    const container = slider.parentElement;
-    const indicators = document.querySelectorAll('#riceIndicators .slider-dot');
-    let current = 0;
-    const total = 4;
-
-    window.slideRice = function(dir) {
-      current = (current + dir + total) % total;
-      updateSlider();
-    };
-
-    window.goToRice = function(index) {
-      current = index;
-      updateSlider();
-    };
-
-    function updateSlider() {
-      const offset = -(current * 100);
-      slider.style.transform = `translateX(${offset}%)`;
-      indicators.forEach((dot, i) => {
-        dot.classList.toggle('active', i === current);
-      });
-    }
-
-    // 自动播放
-    let autoPlay = setInterval(() => slideRice(1), 3000);
-    let touchStartX = 0;
-    container.addEventListener('touchstart', e => {
-      touchStartX = e.touches[0].clientX;
-      clearInterval(autoPlay);
-    });
-    container.addEventListener('touchend', e => {
-      const diff = touchStartX - e.changedTouches[0].clientX;
-      if (Math.abs(diff) > 50) slideRice(diff > 0 ? 1 : -1);
-      autoPlay = setInterval(() => slideRice(1), 3000);
-    });
-
-    window.addEventListener('resize', () => {
-      updateSlider();
-    });
-
-    updateSlider();
-  })();
-
-  // 小吃滑动
-  (function() {
-    const slider = document.getElementById('snackSlider');
-    const container = slider.parentElement;
-    const indicators = document.querySelectorAll('#snackIndicators .slider-dot');
-    let current = 0;
-    const total = 4;
-
-    window.slideSnack = function(dir) {
-      current = (current + dir + total) % total;
-      updateSlider();
-    };
-
-    window.goToSnack = function(index) {
-      current = index;
-      updateSlider();
-    };
-
-    function updateSlider() {
-      const offset = -(current * 100);
-      slider.style.transform = `translateX(${offset}%)`;
-      indicators.forEach((dot, i) => {
-        dot.classList.toggle('active', i === current);
-      });
-    }
-
-    // 自动播放
-    let autoPlay = setInterval(() => slideSnack(1), 3000);
-    let touchStartX = 0;
-    container.addEventListener('touchstart', e => {
-      touchStartX = e.touches[0].clientX;
-      clearInterval(autoPlay);
-    });
-    container.addEventListener('touchend', e => {
-      const diff = touchStartX - e.changedTouches[0].clientX;
-      if (Math.abs(diff) > 50) slideSnack(diff > 0 ? 1 : -1);
-      autoPlay = setInterval(() => slideSnack(1), 3000);
-    });
-
-    window.addEventListener('resize', () => {
-      updateSlider();
-    });
-
-    updateSlider();
   })();
 </script>
 
