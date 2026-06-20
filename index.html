@@ -289,24 +289,22 @@
 
   .dish-slide {
     flex: 0 0 100%;
+    width: 85vw;
     max-width: 400px;
-    margin: 0 auto;
+    margin: 0;
     background: #fff;
     border-radius: 16px;
     overflow: hidden;
     box-shadow: 0 4px 20px rgba(255,107,53,0.12);
     padding-bottom: 1.2rem;
-    transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.5s ease;
-    opacity: 0.7;
   }
 
   .dish-slide.active {
     opacity: 1;
-    transform: scale(1);
   }
 
   .dish-slide:not(.active) {
-    transform: scale(0.95);
+    opacity: 0.5;
   }
 
   .dish-slide-image {
@@ -811,15 +809,11 @@
 
   // 米饭滑动
   (function() {
-    const container = document.querySelector('#riceSlider').parentElement;
+    const slider = document.getElementById('riceSlider');
+    const container = slider.parentElement;
     const indicators = document.querySelectorAll('#riceIndicators .slider-dot');
     let current = 0;
     const total = 4;
-
-    function getSlideWidth() {
-      const slide = document.querySelector('#riceSlider .dish-slide');
-      return slide ? slide.offsetWidth : 0;
-    }
 
     window.slideRice = function(dir) {
       current = (current + dir + total) % total;
@@ -832,12 +826,9 @@
     };
 
     function updateSlider() {
-      const slideWidth = getSlideWidth();
-      if (slideWidth > 0) {
-        container.style.transform = `translateX(-${current * slideWidth}px)`;
-      }
-      // 更新卡片激活状态
-      const slides = container.querySelectorAll('.dish-slide');
+      const offset = -(current * 100);
+      slider.style.transform = `translateX(${offset}%)`;
+      const slides = slider.querySelectorAll('.dish-slide');
       slides.forEach((slide, i) => {
         slide.classList.toggle('active', i === current);
       });
@@ -859,23 +850,20 @@
       autoPlay = setInterval(() => slideRice(1), 3000);
     });
 
-    // 窗口缩放时重新计算
     window.addEventListener('resize', () => {
       updateSlider();
     });
+
+    updateSlider();
   })();
 
   // 小吃滑动
   (function() {
-    const container = document.querySelector('#snackSlider').parentElement;
+    const slider = document.getElementById('snackSlider');
+    const container = slider.parentElement;
     const indicators = document.querySelectorAll('#snackIndicators .slider-dot');
     let current = 0;
     const total = 4;
-
-    function getSlideWidth() {
-      const slide = document.querySelector('#snackSlider .dish-slide');
-      return slide ? slide.offsetWidth : 0;
-    }
 
     window.slideSnack = function(dir) {
       current = (current + dir + total) % total;
@@ -888,12 +876,9 @@
     };
 
     function updateSlider() {
-      const slideWidth = getSlideWidth();
-      if (slideWidth > 0) {
-        container.style.transform = `translateX(-${current * slideWidth}px)`;
-      }
-      // 更新卡片激活状态
-      const slides = container.querySelectorAll('.dish-slide');
+      const offset = -(current * 100);
+      slider.style.transform = `translateX(${offset}%)`;
+      const slides = slider.querySelectorAll('.dish-slide');
       slides.forEach((slide, i) => {
         slide.classList.toggle('active', i === current);
       });
@@ -915,10 +900,11 @@
       autoPlay = setInterval(() => slideSnack(1), 3000);
     });
 
-    // 窗口缩放时重新计算
     window.addEventListener('resize', () => {
       updateSlider();
     });
+
+    updateSlider();
   })();
 </script>
 
