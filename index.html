@@ -15,6 +15,75 @@
     overflow-x: hidden;
   }
 
+  /* ========== 开场动画遮罩 ========== */
+  .intro-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: #ff6b35;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    animation: introFadeOut 0.8s ease 2.5s forwards;
+    pointer-events: none;
+  }
+
+  .intro-logo {
+    width: clamp(80px, 25vw, 120px);
+    height: auto;
+    border-radius: 50%;
+    border: 3px solid #fff;
+    box-shadow: 0 0 40px rgba(255,255,255,0.3);
+    animation: introScaleIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .intro-brand {
+    font-size: clamp(1.5rem, 6vw, 2.5rem);
+    font-weight: 900;
+    color: #fff;
+    margin-top: 1.5rem;
+    letter-spacing: 0.1em;
+    animation: introFadeUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.3s both;
+  }
+
+  .intro-sub {
+    font-size: clamp(0.8rem, 3vw, 1rem);
+    color: rgba(255,255,255,0.8);
+    margin-top: 0.5rem;
+    letter-spacing: 0.2em;
+    animation: introFadeUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.6s both;
+  }
+
+  .intro-line {
+    width: 60px;
+    height: 3px;
+    background: rgba(255,255,255,0.6);
+    margin-top: 2rem;
+    border-radius: 2px;
+    animation: introLineExpand 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.9s both;
+  }
+
+  @keyframes introScaleIn {
+    from { transform: scale(0.3); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+
+  @keyframes introFadeUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  @keyframes introLineExpand {
+    from { width: 0; opacity: 0; }
+    to { width: 60px; opacity: 1; }
+  }
+
+  @keyframes introFadeOut {
+    0% { opacity: 1; }
+    100% { opacity: 0; visibility: hidden; }
+  }
+
   /* ========== 顶部公告栏 ========== */
   .announcement-bar {
     position: fixed;
@@ -494,6 +563,14 @@
 </style>
 </head>
 <body>
+
+<!-- ========== 开场动画 ========== -->
+<div class="intro-overlay">
+  <img src="picture/logo.jpg" alt="" class="intro-logo">
+  <div class="intro-brand">饭米粒米饭王国</div>
+  <div class="intro-sub">粒粒饱满，口口香浓</div>
+  <div class="intro-line"></div>
+</div>
 
 <!-- ========== 顶部公告栏 ========== -->
 <div class="announcement-bar">
