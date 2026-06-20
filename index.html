@@ -291,20 +291,12 @@
     flex: 0 0 100%;
     width: 85vw;
     max-width: 400px;
-    margin: 0;
+    margin: 0 auto;
     background: #fff;
     border-radius: 16px;
     overflow: hidden;
     box-shadow: 0 4px 20px rgba(255,107,53,0.12);
     padding-bottom: 1.2rem;
-  }
-
-  .dish-slide.active {
-    opacity: 1;
-  }
-
-  .dish-slide:not(.active) {
-    opacity: 0.5;
   }
 
   .dish-slide-image {
@@ -611,6 +603,39 @@
   </div>
 </div>
 
+<!-- ========== Banner轮播 ========== -->
+<section class="banner-section">
+  <div class="banner-track" id="bannerTrack">
+    <div class="banner-slide" style="background-image: url('picture/招牌咖喱鸡排蛋包饭23.9.jpg')"></div>
+    <div class="banner-slide" style="background-image: url('picture/卤肉饭25.jpg')"></div>
+    <div class="banner-slide" style="background-image: url('picture/鸡腿饭25.jpg')"></div>
+  </div>
+  <div class="banner-dots">
+    <span class="banner-dot active" data-index="0"></span>
+    <span class="banner-dot" data-index="1"></span>
+    <span class="banner-dot" data-index="2"></span>
+  </div>
+</section>
+
+<!-- ========== 优惠活动区 ========== -->
+<section class="promo-section">
+  <div class="promo-card">
+    <div class="promo-tag">限时优惠</div>
+    <div class="promo-title">满25减5</div>
+    <div class="promo-desc">点餐即享立减优惠</div>
+  </div>
+  <div class="promo-card">
+    <div class="promo-tag">超值套餐</div>
+    <div class="promo-title">米饭+小吃</div>
+    <div class="promo-desc">套餐组合更划算</div>
+  </div>
+  <div class="promo-card">
+    <div class="promo-tag">新品推荐</div>
+    <div class="promo-title">香香元宝鸡</div>
+    <div class="promo-desc">酥脆可口小食</div>
+  </div>
+</section>
+
 <!-- ========== HERO ========== -->
 <section class="hero">
   <div class="hero-pattern"></div>
@@ -828,10 +853,6 @@
     function updateSlider() {
       const offset = -(current * 100);
       slider.style.transform = `translateX(${offset}%)`;
-      const slides = slider.querySelectorAll('.dish-slide');
-      slides.forEach((slide, i) => {
-        slide.classList.toggle('active', i === current);
-      });
       indicators.forEach((dot, i) => {
         dot.classList.toggle('active', i === current);
       });
@@ -878,10 +899,6 @@
     function updateSlider() {
       const offset = -(current * 100);
       slider.style.transform = `translateX(${offset}%)`;
-      const slides = slider.querySelectorAll('.dish-slide');
-      slides.forEach((slide, i) => {
-        slide.classList.toggle('active', i === current);
-      });
       indicators.forEach((dot, i) => {
         dot.classList.toggle('active', i === current);
       });
