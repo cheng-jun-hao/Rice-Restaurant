@@ -289,6 +289,7 @@
   .dish-slide {
     flex: 0 0 85vw;
     max-width: 400px;
+    min-width: 85vw;
     margin: 0 auto;
     background: #fff;
     border-radius: 16px;
@@ -845,10 +846,15 @@
 
   // 米饭滑动
   (function() {
-    const slider = document.getElementById('riceSlider');
+    const container = document.querySelector('#riceSlider').parentElement;
     const indicators = document.querySelectorAll('#riceIndicators .slider-dot');
     let current = 0;
     const total = 4;
+
+    function getSlideWidth() {
+      const slide = document.querySelector('#riceSlider .dish-slide');
+      return slide ? slide.offsetWidth : 0;
+    }
 
     window.slideRice = function(dir) {
       current = (current + dir + total) % total;
@@ -861,7 +867,10 @@
     };
 
     function updateSlider() {
-      slider.style.transform = `translateX(-${current * (100 / total)}%)`;
+      const slideWidth = getSlideWidth();
+      if (slideWidth > 0) {
+        container.style.transform = `translateX(-${current * slideWidth}px)`;
+      }
       indicators.forEach((dot, i) => {
         dot.classList.toggle('active', i === current);
       });
@@ -870,11 +879,11 @@
     // 自动播放
     let autoPlay = setInterval(() => slideRice(1), 3000);
     let touchStartX = 0;
-    slider.addEventListener('touchstart', e => {
+    container.addEventListener('touchstart', e => {
       touchStartX = e.touches[0].clientX;
       clearInterval(autoPlay);
     });
-    slider.addEventListener('touchend', e => {
+    container.addEventListener('touchend', e => {
       const diff = touchStartX - e.changedTouches[0].clientX;
       if (Math.abs(diff) > 50) slideRice(diff > 0 ? 1 : -1);
       autoPlay = setInterval(() => slideRice(1), 3000);
@@ -883,10 +892,15 @@
 
   // 小吃滑动
   (function() {
-    const slider = document.getElementById('snackSlider');
+    const container = document.querySelector('#snackSlider').parentElement;
     const indicators = document.querySelectorAll('#snackIndicators .slider-dot');
     let current = 0;
     const total = 4;
+
+    function getSlideWidth() {
+      const slide = document.querySelector('#snackSlider .dish-slide');
+      return slide ? slide.offsetWidth : 0;
+    }
 
     window.slideSnack = function(dir) {
       current = (current + dir + total) % total;
@@ -899,7 +913,10 @@
     };
 
     function updateSlider() {
-      slider.style.transform = `translateX(-${current * (100 / total)}%)`;
+      const slideWidth = getSlideWidth();
+      if (slideWidth > 0) {
+        container.style.transform = `translateX(-${current * slideWidth}px)`;
+      }
       indicators.forEach((dot, i) => {
         dot.classList.toggle('active', i === current);
       });
@@ -908,11 +925,11 @@
     // 自动播放
     let autoPlay = setInterval(() => slideSnack(1), 3000);
     let touchStartX = 0;
-    slider.addEventListener('touchstart', e => {
+    container.addEventListener('touchstart', e => {
       touchStartX = e.touches[0].clientX;
       clearInterval(autoPlay);
     });
-    slider.addEventListener('touchend', e => {
+    container.addEventListener('touchend', e => {
       const diff = touchStartX - e.changedTouches[0].clientX;
       if (Math.abs(diff) > 50) slideSnack(diff > 0 ? 1 : -1);
       autoPlay = setInterval(() => slideSnack(1), 3000);
