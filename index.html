@@ -279,6 +279,7 @@
   .dish-slider-container {
     position: relative;
     overflow: hidden;
+    padding: 0 6vw;
   }
 
   .dish-slider {
@@ -287,9 +288,8 @@
   }
 
   .dish-slide {
-    flex: 0 0 85vw;
+    flex: 0 0 100%;
     max-width: 400px;
-    min-width: 85vw;
     margin: 0 auto;
     background: #fff;
     border-radius: 16px;
@@ -298,11 +298,6 @@
     padding-bottom: 1.2rem;
     transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.5s ease;
     opacity: 0.7;
-  }
-
-  .dish-slider-container {
-    position: relative;
-    overflow: hidden;
   }
 
   .dish-slide.active {
@@ -386,38 +381,6 @@
     background: #ff6b35;
     width: 20px;
     border-radius: 3px;
-  }
-
-  /* 滑动箭头 */
-  .slider-arrow {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 36px;
-    height: 36px;
-    background: rgba(255,255,255,0.9);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    z-index: 10;
-    transition: all 0.3s ease;
-  }
-
-  .slider-arrow:hover {
-    background: #fff;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-  }
-
-  .slider-arrow.prev { left: 8px; }
-  .slider-arrow.next { right: 8px; }
-
-  .slider-arrow svg {
-    width: 16px;
-    height: 16px;
-    fill: #ff6b35;
   }
 
   /* ========== 全部菜品网格 ========== */
@@ -629,13 +592,11 @@
   /* ========== 响应式 ========== */
   @media (min-width: 768px) {
     .menu-grid { grid-template-columns: repeat(3, 1fr); }
-    .dish-slide { flex: 0 0 60vw; }
     .menu-card-image { height: 130px; }
   }
 
   @media (min-width: 1024px) {
     .menu-grid { grid-template-columns: repeat(4, 1fr); }
-    .dish-slide { flex: 0 0 40vw; max-width: 450px; }
     .menu-card-image { height: 140px; }
   }
 </style>
@@ -712,12 +673,6 @@
         </div>
       </div>
     </div>
-    <div class="slider-arrow prev" onclick="slideRice(-1)">
-      <svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
-    </div>
-    <div class="slider-arrow next" onclick="slideRice(1)">
-      <svg viewBox="0 0 24 24"><path d="M8.59 16.59L10 18l6-6-6-6-1.41 1.41L13.17 12z"/></svg>
-    </div>
   </div>
   <div class="slider-indicators" id="riceIndicators">
     <span class="slider-dot active" onclick="goToRice(0)"></span>
@@ -778,12 +733,6 @@
           <div class="dish-slide-price">¥8.8</div>
         </div>
       </div>
-    </div>
-    <div class="slider-arrow prev" onclick="slideSnack(-1)">
-      <svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
-    </div>
-    <div class="slider-arrow next" onclick="slideSnack(1)">
-      <svg viewBox="0 0 24 24"><path d="M8.59 16.59L10 18l6-6-6-6-1.41 1.41L13.17 12z"/></svg>
     </div>
   </div>
   <div class="slider-indicators" id="snackIndicators">
@@ -909,6 +858,11 @@
       if (Math.abs(diff) > 50) slideRice(diff > 0 ? 1 : -1);
       autoPlay = setInterval(() => slideRice(1), 3000);
     });
+
+    // 窗口缩放时重新计算
+    window.addEventListener('resize', () => {
+      updateSlider();
+    });
   })();
 
   // 小吃滑动
@@ -959,6 +913,11 @@
       const diff = touchStartX - e.changedTouches[0].clientX;
       if (Math.abs(diff) > 50) slideSnack(diff > 0 ? 1 : -1);
       autoPlay = setInterval(() => slideSnack(1), 3000);
+    });
+
+    // 窗口缩放时重新计算
+    window.addEventListener('resize', () => {
+      updateSlider();
     });
   })();
 </script>
