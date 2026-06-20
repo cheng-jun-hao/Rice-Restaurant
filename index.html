@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>饭米粒米饭王国</title>
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html { font-size: 16px; -webkit-font-smoothing: antialiased; }
+  body {
+    font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+    background: #fff8f0;
+    color: #333;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ========== 顶部公告栏 ========== */
+  .announcement-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background: linear-gradient(90deg, #ff6b35 0%, #f7c59f 50%, #ff6b35 100%);
+    padding: 0.5rem 1rem;
+    text-align: center;
+  }
+
+  .announcement-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .announcement-icon {
+    font-size: 1rem;
+    animation: bounce 1.5s ease-in-out infinite;
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-3px); }
+  }
+
+  .announcement-text {
+    font-size: clamp(0.7rem, 2.5vw, 0.8rem);
+    font-weight: 600;
+    color: #fff;
+    letter-spacing: 0.05em;
+  }
+
+  .announcement-divider {
+    color: rgba(255,255,255,0.5);
+  }
+
+  /* ========== Banner轮播 ========== */
+  .banner-section {
+    position: relative;
+    margin-top: 38px;
+    height: 45vw;
+    min-height: 180px;
+    max-height: 350px;
+    overflow: hidden;
+  }
+
+  .banner-track {
+    display: flex;
+    transition: transform 0.5s ease;
+    height: 100%;
+  }
+
+  .banner-slide {
+    flex: 0 0 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+  }
+
+  .banner-slide::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(255,107,53,0.1) 0%, rgba(255,248,240,0.4) 100%);
+  }
+
+  .banner-dots {
+    position: absolute;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    z-index: 10;
+  }
+
+  .banner-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.5);
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .banner-dot.active {
+    background: #ff6b35;
+    width: 20px;
+    border-radius: 4px;
+  }
+
+  /* ========== 优惠活动区 ========== */
+  .promo-section {
+    padding: 4vw 6vw;
+    background: #fff;
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .promo-section::-webkit-scrollbar {
+    display: none;
+  }
+
+  .promo-card {
+    flex: 0 0 auto;
+    width: 65vw;
+    max-width: 280px;
+    min-width: 200px;
+    background: linear-gradient(135deg, #ff6b35 0%, #ff8c42 100%);
+    border-radius: 12px;
+    padding: 1.2rem;
+    color: #fff;
+    box-shadow: 0 4px 15px rgba(255,107,53,0.3);
+    transition: transform 0.3s ease;
+  }
+
+  .promo-card:hover {
+    transform: scale(1.02);
+  }
+
+  .promo-card:nth-child(2) {
+    background: linear-gradient(135deg, #f7c59f 0%, #ffeaa7 100%);
+    color: #8b5a2b;
+  }
+
+  .promo-tag {
+    font-size: 0.65rem;
+    font-weight: 700;
+    padding: 0.2em 0.6em;
+    background: rgba(255,255,255,0.3);
+    border-radius: 10px;
+    display: inline-block;
+    margin-bottom: 0.5rem;
+  }
+
+  .promo-title {
+    font-size: clamp(1rem, 4vw, 1.2rem);
+    font-weight: 900;
+    margin-bottom: 0.3rem;
+  }
+
+  .promo-desc {
+    font-size: 0.8rem;
+    opacity: 0.9;
+  }
+
+  /* ========== 波浪分隔线 ========== */
+  .wave-divider {
+    width: 100%;
+    height: 30px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z' fill='%23fff8f0'/%3E%3C/svg%3E") no-repeat center;
+    background-size: cover;
+  }
+
+  .wave-divider-reverse {
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z' fill='%23fff'/%3E%3C/svg%3E") no-repeat center;
+    background-size: cover;
+    transform: rotate(180deg);
+  }
+
+  /* ========== HERO ========== */
+  .hero {
+    position: relative;
+    width: 100%;
+    height: 60vw;
+    min-height: 280px;
+    max-height: 450px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: linear-gradient(135deg, #fff8f0 0%, #ffeaa7 100%);
+  }
+
+  .hero-pattern {
+    position: absolute;
+    inset: 0;
+    opacity: 0.05;
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ff6b35' fill-opacity='1'%3E%3Ccircle cx='30' cy='30' r='8'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    padding: 0 6vw;
+  }
+
+  .hero-logo {
+    width: clamp(70px, 20vw, 100px);
+    height: auto;
+    margin-bottom: 1rem;
+    border-radius: 50%;
+    border: 3px solid #ff6b35;
+    box-shadow: 0 4px 20px rgba(255,107,53,0.3);
+  }
+
+  .hero-brand {
+    font-size: clamp(2rem, 8vw, 3.5rem);
+    font-weight: 900;
+    color: #ff6b35;
+    line-height: 1.1;
+    margin-bottom: 0.3rem;
+  }
+
+  .hero-sub {
+    font-size: clamp(0.9rem, 3vw, 1.1rem);
+    color: #8b5a2b;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+  }
+
+  .hero-line {
+    width: 60%;
+    max-width: 150px;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #ff6b35, transparent);
+    margin: 1rem auto 0;
+    border-radius: 2px;
+  }
+
+  /* ========== 菜品滑动区 ========== */
+  .menu-section {
+    padding: 8vw 0;
+    background: #fff8f0;
+    position: relative;
+  }
+
+  .section-header {
+    text-align: center;
+    padding: 0 6vw;
+    margin-bottom: 2rem;
+  }
+
+  .section-label {
+    font-size: clamp(0.7rem, 2.5vw, 0.8rem);
+    font-weight: 700;
+    color: #ff6b35;
+    letter-spacing: 0.3em;
+    margin-bottom: 0.5rem;
+    display: inline-block;
+  }
+
+  .section-title {
+    font-size: clamp(1.5rem, 5vw, 2rem);
+    font-weight: 900;
+    color: #333;
+    line-height: 1.3;
+  }
+
+  .dish-slider-container {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .dish-slider {
+    display: flex;
+    transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .dish-slide {
+    flex: 0 0 85vw;
+    max-width: 400px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(255,107,53,0.12);
+    padding-bottom: 1.2rem;
+  }
+
+  .dish-slide-image {
+    width: 100%;
+    height: 55vw;
+    max-height: 280px;
+    min-height: 180px;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+  }
+
+  .dish-slide-tag {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background: #ff6b35;
+    color: #fff;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0.3em 0.8em;
+    border-radius: 15px;
+    letter-spacing: 0.05em;
+    box-shadow: 0 2px 8px rgba(255,107,53,0.4);
+  }
+
+  .dish-slide-info {
+    padding: 1.2rem 1rem 0;
+    text-align: center;
+  }
+
+  .dish-slide-name {
+    font-size: clamp(1.1rem, 4vw, 1.4rem);
+    font-weight: 900;
+    color: #333;
+    margin-bottom: 0.5rem;
+  }
+
+  .dish-slide-desc {
+    font-size: clamp(0.8rem, 2.5vw, 0.9rem);
+    color: #888;
+    margin-bottom: 0.8rem;
+    line-height: 1.5;
+  }
+
+  .dish-slide-price {
+    font-size: clamp(1.3rem, 5vw, 1.6rem);
+    font-weight: 900;
+    color: #ff6b35;
+    font-family: "SF Mono", "Menlo", monospace;
+  }
+
+  /* 滑动指示器 */
+  .slider-indicators {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 1.5rem;
+    padding: 0 6vw;
+  }
+
+  .slider-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #ddd;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .slider-dot.active {
+    background: #ff6b35;
+    width: 20px;
+    border-radius: 3px;
+  }
+
+  /* 滑动箭头 */
+  .slider-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 36px;
+    height: 36px;
+    background: rgba(255,255,255,0.9);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    z-index: 10;
+    transition: all 0.3s ease;
+  }
+
+  .slider-arrow:hover {
+    background: #fff;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+  }
+
+  .slider-arrow.prev { left: 8px; }
+  .slider-arrow.next { right: 8px; }
+
+  .slider-arrow svg {
+    width: 16px;
+    height: 16px;
+    fill: #ff6b35;
+  }
+
+  /* ========== 全部菜品网格 ========== */
+  .menu-grid-section {
+    padding: 6vw;
+    background: #fff;
+  }
+
+  .menu-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .menu-card {
+    background: #fff8f0;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(255,107,53,0.08);
+    transition: all 0.3s ease;
+  }
+
+  .menu-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(255,107,53,0.15);
+  }
+
+  .menu-card-image {
+    width: 100%;
+    height: 110px;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+  }
+
+  .menu-card-tag {
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    background: #ff6b35;
+    color: #fff;
+    font-size: 0.6rem;
+    font-weight: 600;
+    padding: 0.15em 0.5em;
+    border-radius: 8px;
+  }
+
+  .menu-card-info {
+    padding: 0.8rem;
+  }
+
+  .menu-card-name {
+    font-size: clamp(0.85rem, 3vw, 0.95rem);
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 0.2rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .menu-card-price {
+    font-size: clamp(1rem, 3.5vw, 1.15rem);
+    font-weight: 900;
+    color: #ff6b35;
+    font-family: "SF Mono", "Menlo", monospace;
+  }
+
+  /* ========== 联系区 ========== */
+  .contact-section {
+    position: relative;
+    padding: 12vw 6vw;
+    background: url('picture/卤肉饭25.jpg') center/cover no-repeat;
+    text-align: center;
+  }
+
+  .contact-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255,248,240,0.92);
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .contact-intro {
+    position: relative;
+    z-index: 10;
+    font-size: clamp(0.8rem, 2.5vw, 0.9rem);
+    color: #ff6b35;
+    letter-spacing: 0.15em;
+    margin-bottom: 1.2rem;
+  }
+
+  .contact-phone {
+    position: relative;
+    z-index: 10;
+    display: inline-block;
+    font-size: clamp(2rem, 8vw, 3rem);
+    font-weight: 900;
+    color: #ff6b35;
+    letter-spacing: 0.05em;
+    text-decoration: none;
+  }
+
+  .contact-buttons {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .contact-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.7rem 1.3rem;
+    font-size: clamp(0.8rem, 3vw, 0.9rem);
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+  }
+
+  .contact-btn svg {
+    width: 1em;
+    height: 1em;
+  }
+
+  .contact-btn-call {
+    background: #ff6b35;
+    color: #fff;
+    box-shadow: 0 4px 15px rgba(255,107,53,0.3);
+  }
+
+  .contact-btn-call:hover {
+    transform: translateY(-2px);
+  }
+
+  .contact-btn-nav {
+    background: #333;
+    color: #f7c59f;
+  }
+
+  .contact-btn-nav:hover {
+    transform: translateY(-2px);
+  }
+
+  .contact-addr {
+    position: relative;
+    z-index: 10;
+    margin-top: 1.2rem;
+    font-size: clamp(0.75rem, 2.5vw, 0.85rem);
+    color: #666;
+  }
+
+  .contact-hours {
+    position: relative;
+    z-index: 10;
+    margin-top: 0.4rem;
+    font-size: clamp(0.7rem, 2vw, 0.8rem);
+    color: #888;
+  }
+
+  /* ========== 底部悬浮点餐按钮 ========== */
+  .float-order-btn {
+    position: fixed;
+    bottom: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 999;
+  }
+
+  .float-order-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.8rem 1.8rem;
+    background: linear-gradient(135deg, #ff6b35 0%, #ff8c42 100%);
+    color: #fff;
+    font-size: clamp(0.9rem, 3.5vw, 1rem);
+    font-weight: 700;
+    text-decoration: none;
+    border-radius: 50px;
+    box-shadow: 0 6px 25px rgba(255,107,53,0.4);
+    transition: all 0.3s ease;
+  }
+
+  .float-order-link:hover {
+    transform: scale(1.05);
+  }
+
+  .float-order-icon {
+    font-size: 1.2rem;
+  }
+
+  /* ========== 底部 ========== */
+  .footer {
+    padding: 3rem 6vw 5rem;
+    text-align: center;
+    font-size: 0.7rem;
+    color: #999;
+    background: #fff;
+  }
+
+  /* ========== 响应式 ========== */
+  @media (min-width: 768px) {
+    .menu-grid { grid-template-columns: repeat(3, 1fr); }
+    .dish-slide { flex: 0 0 60vw; }
+    .menu-card-image { height: 130px; }
+  }
+
+  @media (min-width: 1024px) {
+    .menu-grid { grid-template-columns: repeat(4, 1fr); }
+    .dish-slide { flex: 0 0 40vw; max-width: 450px; }
+    .menu-card-image { height: 140px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ========== 顶部公告栏 ========== -->
+<div class="announcement-bar">
+  <div class="announcement-content">
+    <span class="announcement-icon">✨</span>
+    <span class="announcement-text">粒粒饱满，口口香浓</span>
+    <span class="announcement-divider">|</span>
+    <span class="announcement-text">营业中 10:00-22:00</span>
+  </div>
+</div>
+
+<!-- ========== Banner轮播 ========== -->
+<section class="banner-section">
+  <div class="banner-track" id="bannerTrack">
+    <div class="banner-slide" style="background-image: url('picture/招牌咖喱鸡排蛋包饭23.9.jpg')"></div>
+    <div class="banner-slide" style="background-image: url('picture/卤肉饭25.jpg')"></div>
+    <div class="banner-slide" style="background-image: url('picture/鸡腿饭25.jpg')"></div>
+  </div>
+  <div class="banner-dots">
+    <span class="banner-dot active" data-index="0"></span>
+    <span class="banner-dot" data-index="1"></span>
+    <span class="banner-dot" data-index="2"></span>
+  </div>
+</section>
+
+<!-- ========== 优惠活动区 ========== -->
+<section class="promo-section">
+  <div class="promo-card">
+    <div class="promo-tag">限时优惠</div>
+    <div class="promo-title">满25减5</div>
+    <div class="promo-desc">点餐即享立减优惠</div>
+  </div>
+  <div class="promo-card">
+    <div class="promo-tag">超值套餐</div>
+    <div class="promo-title">米饭+小吃</div>
+    <div class="promo-desc">套餐组合更划算</div>
+  </div>
+  <div class="promo-card">
+    <div class="promo-tag">新品推荐</div>
+    <div class="promo-title">香香元宝鸡</div>
+    <div class="promo-desc">酥脆可口小食</div>
+  </div>
+</section>
+
+<!-- ========== HERO ========== -->
+<section class="hero">
+  <div class="hero-pattern"></div>
+  <div class="hero-content">
+    <img src="picture/logo.jpg" alt="饭米粒米饭王国" class="hero-logo">
+    <h1 class="hero-brand">饭米粒米饭王国</h1>
+    <p class="hero-sub">粒粒饱满 · 口口香浓</p>
+    <div class="hero-line"></div>
+  </div>
+</section>
+
+<!-- ========== 米饭类滑动展示 ========== -->
+<section class="menu-section">
+  <div class="section-header">
+    <div class="section-label">米 饭 类</div>
+    <h2 class="section-title">精选米饭 · 元气满满</h2>
+  </div>
+  <div class="dish-slider-container">
+    <div class="dish-slider" id="riceSlider">
+      <div class="dish-slide">
+        <div class="dish-slide-image" style="background-image: url('picture/招牌咖喱鸡排蛋包饭23.9.jpg')">
+          <span class="dish-slide-tag">🏆 招牌</span>
+        </div>
+        <div class="dish-slide-info">
+          <div class="dish-slide-name">招牌咖喱鸡排蛋包饭</div>
+          <div class="dish-slide-desc">秘制咖喱酱搭配金黄鸡排</div>
+          <div class="dish-slide-price">¥23.9</div>
+        </div>
+      </div>
+      <div class="dish-slide">
+        <div class="dish-slide-image" style="background-image: url('picture/咖喱鸡排蛋包饭23.9.jpg')">
+          <span class="dish-slide-tag">🔥 人气</span>
+        </div>
+        <div class="dish-slide-info">
+          <div class="dish-slide-name">咖喱鸡排蛋包饭</div>
+          <div class="dish-slide-desc">浓郁咖喱香配嫩滑鸡排</div>
+          <div class="dish-slide-price">¥23.9</div>
+        </div>
+      </div>
+      <div class="dish-slide">
+        <div class="dish-slide-image" style="background-image: url('picture/卤肉饭25.jpg')">
+          <span class="dish-slide-tag">⭐ 必点</span>
+        </div>
+        <div class="dish-slide-info">
+          <div class="dish-slide-name">卤肉饭</div>
+          <div class="dish-slide-desc">秘制卤汁炖煮五花肉</div>
+          <div class="dish-slide-price">¥25</div>
+        </div>
+      </div>
+      <div class="dish-slide">
+        <div class="dish-slide-image" style="background-image: url('picture/鸡腿饭25.jpg')">
+          <span class="dish-slide-tag">👍 推荐</span>
+        </div>
+        <div class="dish-slide-info">
+          <div class="dish-slide-name">鸡腿饭</div>
+          <div class="dish-slide-desc">大鸡腿配香米饭</div>
+          <div class="dish-slide-price">¥25</div>
+        </div>
+      </div>
+    </div>
+    <div class="slider-arrow prev" onclick="slideRice(-1)">
+      <svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+    </div>
+    <div class="slider-arrow next" onclick="slideRice(1)">
+      <svg viewBox="0 0 24 24"><path d="M8.59 16.59L10 18l6-6-6-6-1.41 1.41L13.17 12z"/></svg>
+    </div>
+  </div>
+  <div class="slider-indicators" id="riceIndicators">
+    <span class="slider-dot active" onclick="goToRice(0)"></span>
+    <span class="slider-dot" onclick="goToRice(1)"></span>
+    <span class="slider-dot" onclick="goToRice(2)"></span>
+    <span class="slider-dot" onclick="goToRice(3)"></span>
+  </div>
+</section>
+
+<!-- ========== 波浪分隔 ========== -->
+<div class="wave-divider"></div>
+
+<!-- ========== 小吃类滑动展示 ========== -->
+<section class="menu-section" style="background: #fff;">
+  <div class="section-header">
+    <div class="section-label">小 吃 类</div>
+    <h2 class="section-title">美味小吃 · 锦上添花</h2>
+  </div>
+  <div class="dish-slider-container">
+    <div class="dish-slider" id="snackSlider">
+      <div class="dish-slide">
+        <div class="dish-slide-image" style="background-image: url('picture/香香元宝鸡6.jpg')">
+          <span class="dish-slide-tag">🔥 人气</span>
+        </div>
+        <div class="dish-slide-info">
+          <div class="dish-slide-name">香香元宝鸡</div>
+          <div class="dish-slide-desc">外酥里嫩形似元宝</div>
+          <div class="dish-slide-price">¥6</div>
+        </div>
+      </div>
+      <div class="dish-slide">
+        <div class="dish-slide-image" style="background-image: url('picture/鸡腿6.jpg')">
+          <span class="dish-slide-tag">🔥 热销</span>
+        </div>
+        <div class="dish-slide-info">
+          <div class="dish-slide-name">鸡腿</div>
+          <div class="dish-slide-desc">大鸡腿香嫩多汁</div>
+          <div class="dish-slide-price">¥6</div>
+        </div>
+      </div>
+      <div class="dish-slide">
+        <div class="dish-slide-image" style="background-image: url('picture/香煎荷包蛋6.jpg')">
+          <span class="dish-slide-tag">⭐ 必点</span>
+        </div>
+        <div class="dish-slide-info">
+          <div class="dish-slide-name">香煎荷包蛋</div>
+          <div class="dish-slide-desc">煎至金黄酥脆边缘</div>
+          <div class="dish-slide-price">¥6</div>
+        </div>
+      </div>
+      <div class="dish-slide">
+        <div class="dish-slide-image" style="background-image: url('picture/脆香薯球8.8.jpg')">
+          <span class="dish-slide-tag">👍 推荐</span>
+        </div>
+        <div class="dish-slide-info">
+          <div class="dish-slide-name">脆香薯球</div>
+          <div class="dish-slide-desc">薯泥炸至金黄酥脆</div>
+          <div class="dish-slide-price">¥8.8</div>
+        </div>
+      </div>
+    </div>
+    <div class="slider-arrow prev" onclick="slideSnack(-1)">
+      <svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+    </div>
+    <div class="slider-arrow next" onclick="slideSnack(1)">
+      <svg viewBox="0 0 24 24"><path d="M8.59 16.59L10 18l6-6-6-6-1.41 1.41L13.17 12z"/></svg>
+    </div>
+  </div>
+  <div class="slider-indicators" id="snackIndicators">
+    <span class="slider-dot active" onclick="goToSnack(0)"></span>
+    <span class="slider-dot" onclick="goToSnack(1)"></span>
+    <span class="slider-dot" onclick="goToSnack(2)"></span>
+    <span class="slider-dot" onclick="goToSnack(3)"></span>
+  </div>
+</section>
+
+<!-- ========== 波浪分隔 ========== -->
+<div class="wave-divider wave-divider-reverse"></div>
+
+<!-- ========== 联系信息 ========== -->
+<section class="contact-section">
+  <p class="contact-intro">—— 到店 · 外卖 · 预约 ——</p>
+  <a href="tel:18209203884" class="contact-phone">182-0920-3884</a>
+  <div class="contact-buttons">
+    <a href="tel:18209203884" class="contact-btn contact-btn-call">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/>
+      </svg>
+      一键拨打
+    </a>
+    <a href="https://uri.amap.com/search?keyword=阎良区南孙路洛阳坊快递驿站旁&src=mac&callnative=1" class="contact-btn contact-btn-nav" target="_blank">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polygon points="3 11 22 2 13 21 11 13 3 11"/>
+      </svg>
+      一键导航
+    </a>
+  </div>
+  <p class="contact-addr">阎良区南孙路洛阳坊快递驿站旁</p>
+  <p class="contact-hours">营业时间 10:00 — 22:00 · 全年无休</p>
+</section>
+
+<!-- ========== 底部悬浮点餐按钮 ========== -->
+<div class="float-order-btn">
+  <a href="http://dpurl.cn/2yixv9Nz" target="_blank" class="float-order-link">
+    <span class="float-order-icon">🍛</span>
+    <span class="float-order-text">美团点餐</span>
+  </a>
+</div>
+
+<!-- ========== 底部 ========== -->
+<footer class="footer">
+  饭米粒米饭王国 · 粒粒饱满，口口香浓
+</footer>
+
+<!-- ========== 脚本 ========== -->
+<script>
+  // Banner轮播
+  (function() {
+    const track = document.getElementById('bannerTrack');
+    const dots = document.querySelectorAll('.banner-dot');
+    let currentBanner = 0;
+    const totalBanners = 3;
+
+    function updateBanner(index) {
+      currentBanner = index;
+      track.style.transform = `translateX(-${index * 100}%)`;
+      dots.forEach((dot, i) => {
+        dot.classList.toggle('active', i === index);
+      });
+    }
+
+    dots.forEach(dot => {
+      dot.addEventListener('click', () => {
+        updateBanner(parseInt(dot.dataset.index));
+      });
+    });
+
+    setInterval(() => {
+      updateBanner((currentBanner + 1) % totalBanners);
+    }, 4000);
+  })();
+
+  // 米饭滑动
+  (function() {
+    const slider = document.getElementById('riceSlider');
+    const indicators = document.querySelectorAll('#riceIndicators .slider-dot');
+    let current = 0;
+    const total = 4;
+
+    window.slideRice = function(dir) {
+      current = (current + dir + total) % total;
+      updateSlider();
+    };
+
+    window.goToRice = function(index) {
+      current = index;
+      updateSlider();
+    };
+
+    function updateSlider() {
+      slider.style.transform = `translateX(-${current * (100 / total)}%)`;
+      indicators.forEach((dot, i) => {
+        dot.classList.toggle('active', i === current);
+      });
+    }
+
+    // 自动播放
+    let autoPlay = setInterval(() => slideRice(1), 3000);
+    let touchStartX = 0;
+    slider.addEventListener('touchstart', e => {
+      touchStartX = e.touches[0].clientX;
+      clearInterval(autoPlay);
+    });
+    slider.addEventListener('touchend', e => {
+      const diff = touchStartX - e.changedTouches[0].clientX;
+      if (Math.abs(diff) > 50) slideRice(diff > 0 ? 1 : -1);
+      autoPlay = setInterval(() => slideRice(1), 3000);
+    });
+  })();
+
+  // 小吃滑动
+  (function() {
+    const slider = document.getElementById('snackSlider');
+    const indicators = document.querySelectorAll('#snackIndicators .slider-dot');
+    let current = 0;
+    const total = 4;
+
+    window.slideSnack = function(dir) {
+      current = (current + dir + total) % total;
+      updateSlider();
+    };
+
+    window.goToSnack = function(index) {
+      current = index;
+      updateSlider();
+    };
+
+    function updateSlider() {
+      slider.style.transform = `translateX(-${current * (100 / total)}%)`;
+      indicators.forEach((dot, i) => {
+        dot.classList.toggle('active', i === current);
+      });
+    }
+
+    // 自动播放
+    let autoPlay = setInterval(() => slideSnack(1), 3000);
+    let touchStartX = 0;
+    slider.addEventListener('touchstart', e => {
+      touchStartX = e.touches[0].clientX;
+      clearInterval(autoPlay);
+    });
+    slider.addEventListener('touchend', e => {
+      const diff = touchStartX - e.changedTouches[0].clientX;
+      if (Math.abs(diff) > 50) slideSnack(diff > 0 ? 1 : -1);
+      autoPlay = setInterval(() => slideSnack(1), 3000);
+    });
+  })();
+</script>
+
+</body>
+</html>
